@@ -14,9 +14,31 @@ if (process.env.MONGO_URI) {
   console.log("⚠️  MongoDB URI not configured, skipping database connection");
 }
 
-// CORS configuration - Allow all origins for now (we'll restrict later)
+// CORS configuration - Allow all Vercel/Netlify subdomains
 app.use(cors({
-  origin: '*', // Allow all origins temporarily
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like mobile apps or curl requests)
+    if (!origin) return callback(null, true);
+    
+    // Allow all Vercel preview and production deployments
+    if (origin.includes('vercel.app') || origin.includes('netlify.app')) {
+      return callback(null, true);
+    }
+    
+    // Allow localhost for development
+    if (origin.includes('localhost') || origin.includes('127.0.0.1')) {
+      return callback(null, true);
+    }
+    
+    // Allow specific frontend URL if set
+    if (process.env.FRONTEND_URL && origin === process.env.FRONTEND_URL) {
+      return callback(null, true);
+    }
+    
+    // Allow all origins (you can restrict this later)
+    callback(null, true);
+  },
+  credentials: false, // Set to false when using wildcard origin
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization']
 }));
