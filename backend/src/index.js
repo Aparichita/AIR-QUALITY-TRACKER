@@ -14,14 +14,12 @@ if (process.env.MONGO_URI) {
   console.log("⚠️  MongoDB URI not configured, skipping database connection");
 }
 
-// CORS configuration
-const corsOptions = {
-  origin: process.env.NODE_ENV === 'production' 
-    ? process.env.FRONTEND_URL || 'https://your-frontend-domain.vercel.app'
-    : ['http://localhost:3000', 'http://localhost:5173'],
-  credentials: true
-};
-app.use(cors(corsOptions));
+// CORS configuration - Allow all origins for now (we'll restrict later)
+app.use(cors({
+  origin: '*', // Allow all origins temporarily
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization']
+}));
 app.use(express.json());
 
 // Health check
