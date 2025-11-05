@@ -1,0 +1,123 @@
+.aqi-card {
+  margin-top: 24px;
+  animation: fadeIn 0.5s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.aqi-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.aqi-city {
+  font-size: 1.75rem;
+  font-weight: 700;
+  color: #1f2937;
+}
+
+.aqi-badge {
+  padding: 8px 20px;
+  border-radius: 20px;
+  font-weight: 700;
+  font-size: 1.25rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.aqi-status {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 20px;
+  padding: 16px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.status-label {
+  font-weight: 500;
+  color: #6b7280;
+}
+
+.status-value {
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.aqi-gauge {
+  margin-bottom: 24px;
+}
+
+.gauge-bar {
+  width: 100%;
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.gauge-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.5s ease-out;
+}
+
+.ai-suggestion {
+  background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+  border: 2px solid #bae6fd;
+  border-radius: 16px;
+  padding: 20px;
+  margin-top: 24px;
+}
+
+.suggestion-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.ai-icon {
+  font-size: 1.5rem;
+}
+
+.suggestion-header h3 {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1e40af;
+}
+
+.suggestion-text {
+  color: #1e3a8a;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+@media (max-width: 640px) {
+  .aqi-city {
+    font-size: 1.5rem;
+  }
+
+  .aqi-badge {
+    font-size: 1.1rem;
+    padding: 6px 16px;
+  }
+
+  .aqi-card-header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}

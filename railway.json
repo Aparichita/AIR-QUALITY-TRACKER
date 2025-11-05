@@ -1,0 +1,16 @@
+# Railway deployment configuration
+
+Your backend is ready for Railway deployment. Just:
+
+1. Connect your GitHub repo to Railway
+2. Railway will auto-detect Node.js
+3. Set environment variables:
+   - AQI_API_KEY
+   - OPENAI_API_KEY (optional)
+   - MONGO_URI (optional)
+   - FRONTEND_URL (your frontend domain)
+   - NODE_ENV=production
+
+4. Railway will automatically deploy!
+
+Note: Railway auto-sets PORT, so no need to configure it.
