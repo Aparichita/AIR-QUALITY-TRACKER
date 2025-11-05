@@ -13,7 +13,10 @@ const getAQIData = async (req, res) => {
       return res.status(500).json({ error: "Server is missing AQI_API_KEY configuration" });
     }
 
-    const { data } = await axios.get(`https://api.waqi.info/feed/${city}/?token=${apiKey}`);
+    // Fetch AQI data with timeout
+    const { data } = await axios.get(`https://api.waqi.info/feed/${city}/?token=${apiKey}`, {
+      timeout: 20000 // 20 second timeout for external API
+    });
 
     if (data.status !== "ok") return res.status(404).json({ message: "City not found" });
 
@@ -22,12 +25,29 @@ const getAQIData = async (req, res) => {
       return res.status(502).json({ error: "Invalid AQI data received from provider" });
     }
 
-    const suggestion = await getAISuggestion(aqi);
+    // Get AI suggestion with timeout (don't block if it fails)
+    let suggestion = null;
+    try {
+      suggestion = await Promise.race([
+        getAISuggestion(aqi),
+        new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('AI suggestion timeout')), 15000)
+        )
+      ]);
+    } catch (aiError) {
+      console.error('AI suggestion failed:', aiError.message);
+      suggestion = "Unable to generate AI suggestion right now. General advice: Monitor air quality levels and limit outdoor activity if AQI is high.";
+    }
 
     res.json({ city, aqi, suggestion });
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: "Server error" });
+    console.error('AQI API Error:', err.message);
+    
+    if (err.code === 'ECONNABORTED' || err.message.includes('timeout')) {
+      return res.status(504).json({ error: "AQI service is taking too long to respond. Please try again." });
+    }
+    
+    res.status(500).json({ error: err.message || "Server error" });
   }
 };
 

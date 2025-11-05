@@ -10,7 +10,7 @@ export const fetchAQIData = async (city) => {
     
     const response = await axios.get(url, {
       params: { city },
-      timeout: 10000 // 10 second timeout
+      timeout: 30000 // 30 second timeout (increased for external API calls)
     });
     return { success: true, data: response.data };
   } catch (error) {
@@ -18,7 +18,7 @@ export const fetchAQIData = async (city) => {
     
     // Better error messages
     if (error.code === 'ECONNABORTED') {
-      return { success: false, error: 'Request timeout. Please try again.' };
+      return { success: false, error: 'Request is taking too long. The AQI service might be slow. Please try again.' };
     }
     if (error.response) {
       // Server responded with error
